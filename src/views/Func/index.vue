@@ -21,7 +21,6 @@
               <span> {{ currentTime.hour }}:{{ currentTime.minute }}:{{ currentTime.second }}</span>
             </div>
           </div>
-          <Weather />
         </div>
       </el-col>
     </el-row>
@@ -33,7 +32,6 @@ import { getCurrentTime } from "@/utils/getTime";
 import { mainStore } from "@/store";
 import Music from "@/components/Music.vue";
 import Hitokoto from "@/components/Hitokoto.vue";
-import Weather from "@/components/Weather.vue";
 
 const store = mainStore();
 
@@ -111,7 +109,7 @@ onBeforeUnmount(() => {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       animation: fade 0.5s;
       .time {
         font-size: 1.1rem;
@@ -125,7 +123,7 @@ onBeforeUnmount(() => {
           margin-top: 10px;
           font-size: 3.25rem;
           letter-spacing: 2px;
-          font-family: "UnidreamLED";
+          font-family: "mao", "Microsoft YaHei", sans-serif;
         }
         @media (min-width: 1201px) and (max-width: 1280px) {
           font-size: 1rem;

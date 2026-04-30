@@ -30,16 +30,39 @@ import { Error } from "@icon-park/vue-next";
 const store = mainStore();
 const bgUrl = ref(null);
 const imgTimeout = ref(null);
+const currentDeviceType = ref(null);
 const emit = defineEmits(["loadComplete"]);
 
-// 壁纸随机数
-// 请依据文件夹内的图片个数修改 Math.random() 后面的第一个数字
-const bgRandom = Math.floor(Math.random() * 10 + 1);
+// 电脑壁纸
+const desktopBackgrounds = [
+  "/images/backgrounds/desktop/desktop-01.png",
+  "/images/backgrounds/desktop/desktop-02.png",
+  "/images/backgrounds/desktop/desktop-03.jpg",
+  "/images/backgrounds/desktop/desktop-04.png",
+  "/images/backgrounds/desktop/desktop-05.jpg",
+];
+
+// 手机壁纸
+const mobileBackgrounds = [
+  "/images/backgrounds/mobile/mobile-01.jpg",
+  "/images/backgrounds/mobile/mobile-02.png",
+  "/images/backgrounds/mobile/mobile-03.jpg",
+  "/images/backgrounds/mobile/mobile-04.jpg",
+  "/images/backgrounds/mobile/mobile-05.jpg",
+];
+
+const defaultBackground = desktopBackgrounds[0];
+const getDeviceType = () => (window.innerWidth <= 720 ? "mobile" : "desktop");
+const getRandomBackground = () => {
+  const backgrounds = getDeviceType() === "mobile" ? mobileBackgrounds : desktopBackgrounds;
+  return backgrounds[Math.floor(Math.random() * backgrounds.length)];
+};
 
 // 更换壁纸链接
 const changeBg = (type) => {
   if (type == 0) {
-    bgUrl.value = `/images/background${bgRandom}.jpg`;
+    currentDeviceType.value = getDeviceType();
+    bgUrl.value = getRandomBackground();
   } else if (type == 1) {
     bgUrl.value = "https://api.dujin.org/bing/1920.php";
   } else if (type == 2) {
@@ -76,7 +99,16 @@ const imgLoadError = () => {
       fill: "#efefef",
     }),
   });
-  bgUrl.value = `/images/background${bgRandom}.jpg`;
+  bgUrl.value = defaultBackground;
+};
+
+const handleResize = () => {
+  if (store.coverType != "0") return;
+  const nextDeviceType = getDeviceType();
+  if (nextDeviceType !== currentDeviceType.value) {
+    currentDeviceType.value = nextDeviceType;
+    bgUrl.value = getRandomBackground();
+  }
 };
 
 // 监听壁纸切换
@@ -90,10 +122,12 @@ watch(
 onMounted(() => {
   // 加载壁纸
   changeBg(store.coverType);
+  window.addEventListener("resize", handleResize);
 });
 
 onBeforeUnmount(() => {
   clearTimeout(imgTimeout.value);
+  window.removeEventListener("resize", handleResize);
 });
 </script>
 

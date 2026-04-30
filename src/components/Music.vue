@@ -146,7 +146,7 @@ watch(
 .music {
   width: 100%;
   height: 100%;
-  background: #00000040;
+  background: #00000026;
   backdrop-filter: blur(10px);
   border-radius: 6px;
   padding: 20px;
@@ -256,7 +256,7 @@ watch(
   margin: auto;
   width: 100%;
   height: 100%;
-  background-color: #00000080;
+  background-color: #00000066;
   backdrop-filter: blur(20px);
   z-index: 1;
   .list {
@@ -268,7 +268,7 @@ watch(
     left: calc(50% - 320px);
     width: 640px;
     height: 600px;
-    background-color: #ffffff66;
+    background-color: #ffffff4d;
     border-radius: 6px;
     z-index: 999;
     @media (max-width: 720px) {

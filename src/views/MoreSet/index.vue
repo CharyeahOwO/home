@@ -13,8 +13,7 @@
     <el-row :gutter="40">
       <el-col :span="12" class="left">
         <div class="logo text-hidden">
-          <span class="bg">{{ siteUrl[0] }}</span>
-          <span class="sm">.{{ siteUrl[1] }}</span>
+          <span class="bg">{{ siteName }}</span>
         </div>
         <div class="version">
           <div class="num">v&nbsp;{{ config.version }}</div>
@@ -60,27 +59,19 @@ import config from "@/../package.json";
 const store = mainStore();
 const closeShow = ref(false);
 
-// 站点链接
-const siteUrl = computed(() => {
-  const url = import.meta.env.VITE_SITE_URL;
-  if (!url) return "imsyy.top".split(".");
-  // 判断协议前缀
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    const urlFormat = url.replace(/^(https?:\/\/)/, "");
-    return urlFormat.split(".");
-  }
-  return url.split(".");
-});
+// 站点名称
+const siteName =
+  import.meta.env.VITE_SITE_DISPLAY_NAME || import.meta.env.VITE_SITE_NAME || "Sakura Realm";
 
 // 更新日志
 const upData = reactive({
   new: [
-    "采用 Vue 进行重构",
-    "音乐歌单支持快速自定义",
-    "壁纸支持个性化设置",
-    "音乐播放器支持音量控制",
+    "站点信息已切换为樱落之境",
+    "主页链接已替换为个人站点",
+    "保留壁纸与移动端适配",
+    "头像和背景可直接替换文件",
   ],
-  fix: ["修复天气 API", "时光胶囊显示错误", "移动端动画及细节", "图标更换为 IconPark"],
+  fix: ["移除模板默认外链", "更新备案与建站日期", "精简社交链接", "调整中文标题显示"],
 });
 
 // 跳转源代码仓库
@@ -132,7 +123,8 @@ const jumpTo = (url) => {
 
       .logo {
         transform: translateY(-8%);
-        font-family: "Pacifico-Regular";
+        font-family: "title-script", "mao", "Microsoft YaHei", sans-serif;
+        font-weight: 400;
         padding-left: 22px;
         width: 100%;
         height: 260px;
@@ -141,25 +133,14 @@ const jumpTo = (url) => {
           font-size: 5rem;
         }
 
-        .sm {
-          margin-left: 6px;
-          font-size: 2rem;
-        }
-
         @media (max-width: 990px) {
           .bg {
-            font-size: 4.5rem;
-          }
-          .sm {
-            font-size: 1.7rem;
+            font-size: 4.25rem;
           }
         }
         @media (max-width: 825px) {
           .bg {
-            font-size: 3.8rem;
-          }
-          .sm {
-            font-size: 1.3rem;
+            font-size: 3.6rem;
           }
         }
       }
@@ -171,7 +152,7 @@ const jumpTo = (url) => {
 
         .num {
           font-size: 2rem;
-          font-family: "Pacifico-Regular";
+          font-family: "title-script", "mao", "Microsoft YaHei", sans-serif;
         }
 
         .github {

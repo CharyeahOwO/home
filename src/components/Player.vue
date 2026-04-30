@@ -204,7 +204,7 @@ defineExpose({ playToggle, changeVolume, changeSong, toggleList });
 .aplayer {
   width: 80%;
   border-radius: 6px;
-  font-family: "HarmonyOS_Regular", sans-serif !important;
+  font-family: "mao", "Microsoft YaHei", sans-serif !important;
   :deep(.aplayer-body) {
     background-color: transparent;
     .aplayer-pic {
@@ -212,7 +212,7 @@ defineExpose({ playToggle, changeVolume, changeSong, toggleList });
     }
     .aplayer-info {
       margin-left: 0;
-      background-color: #ffffff40;
+      background-color: #ffffff30;
       border-color: transparent !important;
       .aplayer-music {
         flex-grow: initial;
@@ -270,7 +270,7 @@ defineExpose({ playToggle, changeVolume, changeSong, toggleList });
       li {
         border-color: transparent;
         &.aplayer-list-light {
-          background: #ffffff40;
+          background: #ffffff30;
           border-radius: 6px;
         }
         &:hover {

@@ -3,10 +3,9 @@
   <div class="message">
     <!-- Logo -->
     <div class="logo">
-      <img class="logo-img" :src="siteLogo" alt="logo" />
-      <div :class="{ name: true, 'text-hidden': true, long: siteUrl[0].length >= 6 }">
-        <span class="bg">{{ siteUrl[0] }}</span>
-        <span class="sm">.{{ siteUrl[1] }}</span>
+      <div class="name text-hidden">
+        <span class="bg">{{ siteName }}</span>
+        <span class="sub">{{ siteSubName }}</span>
       </div>
     </div>
     <!-- 简介 -->
@@ -36,19 +35,10 @@ import { Error } from "@icon-park/vue-next";
 import { mainStore } from "@/store";
 const store = mainStore();
 
-// 主页站点logo
-const siteLogo = import.meta.env.VITE_SITE_MAIN_LOGO;
-// 站点链接
-const siteUrl = computed(() => {
-  const url = import.meta.env.VITE_SITE_URL;
-  if (!url) return "imsyy.top".split(".");
-  // 判断协议前缀
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    const urlFormat = url.replace(/^(https?:\/\/)/, "");
-    return urlFormat.split(".");
-  }
-  return url.split(".");
-});
+// 主页显示名称
+const siteName =
+  import.meta.env.VITE_SITE_DISPLAY_NAME || import.meta.env.VITE_SITE_NAME || "Sakura Realm";
+const siteSubName = import.meta.env.VITE_SITE_NAME || "樱落之境";
 
 // 简介区域文字
 const descriptionText = reactive({
@@ -93,38 +83,56 @@ watch(
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     animation: fade 0.5s;
     max-width: 460px;
-    .logo-img {
-      border-radius: 50%;
-      width: 120px;
-    }
+
     .name {
-      width: 100%;
-      padding-left: 22px;
-      transform: translateY(-8px);
-      font-family: "Pacifico-Regular";
+      width: auto;
+      overflow: visible;
+      padding-left: 0;
+      transform: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: "title-script", "mao", "Microsoft YaHei", sans-serif;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-shadow: 0 4px 24px rgb(255 190 210 / 45%);
 
       .bg {
-        font-size: 5rem;
+        font-size: 4.85rem;
+        line-height: 1.12;
+        padding: 0 0.32em 0.04em;
+        overflow: visible;
       }
 
-      .sm {
-        margin-left: 6px;
-        font-size: 2rem;
-        @media (min-width: 721px) and (max-width: 789px) {
-          display: none;
-        }
+      .sub {
+        margin-top: 0.15rem;
+        font-family: "mao", "Microsoft YaHei", sans-serif;
+        font-size: 1rem;
+        opacity: 0.82;
+        text-shadow: 0 2px 12px rgb(0 0 0 / 35%);
       }
     }
     @media (max-width: 768px) {
-      .logo-img {
-        width: 100px;
-      }
+      justify-content: center;
+
       .name {
+        width: auto;
         height: 128px;
+        padding-left: 0;
+        display: flex;
+        align-items: center;
+        transform: none;
+
         .bg {
-          font-size: 4.5rem;
+          font-size: 3.85rem;
+          padding: 0 0.32em 0.04em;
+        }
+
+        .sub {
+          font-size: 0.95rem;
         }
       }
     }
@@ -152,7 +160,9 @@ watch(
 
         p {
           &:nth-of-type(1) {
-            font-family: "Pacifico-Regular";
+            font-family: "title-script", "mao", "Microsoft YaHei", sans-serif;
+            font-size: 1.35rem;
+            font-weight: 400;
           }
         }
       }
