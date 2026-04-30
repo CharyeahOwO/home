@@ -98,6 +98,15 @@ onMounted(() => {
       font-size: 1.15rem;
       text-shadow: 0 0 5px #00000050;
     }
+
+    @media (max-width: 720px) {
+      margin: 1.3rem 0.25rem 0.8rem;
+      justify-content: center;
+
+      .title {
+        font-size: 1.05rem;
+      }
+    }
   }
   .swiper {
     left: -10px;
@@ -162,19 +171,20 @@ onMounted(() => {
         }
       }
       @media (max-width: 720px) {
-        height: 80px;
+        height: 72px;
       }
       @media (max-width: 460px) {
         flex-direction: column;
+        padding: 0 6px;
         .name {
-          font-size: 1rem;
+          font-size: 0.95rem;
           margin-left: 0;
-          margin-top: 8px;
+          margin-top: 6px;
         }
       }
     }
     @media (max-width: 720px) {
-      height: 180px;
+      height: 164px;
     }
   }
 }

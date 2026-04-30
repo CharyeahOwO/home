@@ -18,6 +18,10 @@
           <div :key="descriptionText.hello + descriptionText.text" class="text">
             <p>{{ descriptionText.hello }}</p>
             <p>{{ descriptionText.text }}</p>
+            <div class="hitokoto-line">
+              <span>{{ hitokotoData.text }}</span>
+              <span class="from">-「&nbsp;{{ hitokotoData.from }}&nbsp;」</span>
+            </div>
           </div>
         </Transition>
         <Icon size="16">
@@ -32,6 +36,7 @@
 import { Icon } from "@vicons/utils";
 import { QuoteLeft, QuoteRight } from "@vicons/fa";
 import { Error } from "@icon-park/vue-next";
+import { getHitokoto } from "@/api";
 import { mainStore } from "@/store";
 const store = mainStore();
 
@@ -45,6 +50,21 @@ const descriptionText = reactive({
   hello: import.meta.env.VITE_DESC_HELLO,
   text: import.meta.env.VITE_DESC_TEXT,
 });
+
+const hitokotoData = reactive({
+  text: "星光落在未写完的故事里。",
+  from: "樱落之境",
+});
+
+const getHitokotoData = async () => {
+  try {
+    const result = await getHitokoto();
+    hitokotoData.text = result.hitokoto;
+    hitokotoData.from = result.from;
+  } catch (error) {
+    console.error("一言获取失败", error);
+  }
+};
 
 // 切换右侧功能区
 const changeBox = () => {
@@ -75,6 +95,10 @@ watch(
     }
   },
 );
+
+onMounted(() => {
+  getHitokotoData();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -165,6 +189,22 @@ watch(
             font-weight: 400;
           }
         }
+
+        .hitokoto-line {
+          margin-top: 0.75rem;
+          padding-top: 0.75rem;
+          border-top: 1px solid rgb(255 255 255 / 18%);
+          display: flex;
+          flex-direction: column;
+          line-height: 1.65;
+          opacity: 0.92;
+
+          .from {
+            align-self: flex-end;
+            margin-top: 0.25rem;
+            font-weight: 700;
+          }
+        }
       }
 
       .xicon:nth-of-type(2) {
@@ -172,8 +212,49 @@ watch(
       }
     }
     @media (max-width: 720px) {
-      max-width: 100%;
+      width: min(94%, 360px);
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 1rem 1.15rem;
       pointer-events: none;
+
+      .content {
+        .text {
+          width: 100%;
+          margin: 0.65rem 0.5rem;
+          line-height: 1.85rem;
+          text-align: center;
+
+          .hitokoto-line {
+            align-items: center;
+
+            .from {
+              align-self: center;
+            }
+          }
+        }
+      }
+    }
+
+    @media (max-width: 390px) {
+      width: 94%;
+      padding: 0.9rem 0.95rem;
+
+      .content {
+        .text {
+          margin-left: 0.35rem;
+          margin-right: 0.35rem;
+          line-height: 1.75rem;
+          font-size: 0.95rem;
+
+          p {
+            &:nth-of-type(1) {
+              font-size: 1.2rem;
+            }
+          }
+        }
+      }
     }
   }
   // @media (max-width: 390px) {

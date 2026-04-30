@@ -1,29 +1,18 @@
 <template>
   <!-- 功能区域 -->
   <div :class="store.mobileFuncState ? 'function mobile' : 'function'">
-    <el-row :gutter="20">
-      <el-col :span="12">
-        <div class="left">
-          <Hitokoto />
-          <Music v-if="playerHasId" />
-        </div>
-      </el-col>
-      <el-col :span="12">
-        <div class="right cards">
-          <div class="time">
-            <div class="date">
-              <span>{{ currentTime.year }}&nbsp;年&nbsp;</span>
-              <span>{{ currentTime.month }}&nbsp;月&nbsp;</span>
-              <span>{{ currentTime.day }}&nbsp;日&nbsp;</span>
-              <span class="sm-hidden">{{ currentTime.weekday }}</span>
-            </div>
-            <div class="text">
-              <span> {{ currentTime.hour }}:{{ currentTime.minute }}:{{ currentTime.second }}</span>
-            </div>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
+    <Music v-if="playerHasId" />
+    <div class="time-card cards">
+      <div class="date">
+        <span>{{ currentTime.year }}&nbsp;年&nbsp;</span>
+        <span>{{ currentTime.month }}&nbsp;月&nbsp;</span>
+        <span>{{ currentTime.day }}&nbsp;日&nbsp;</span>
+        <span class="sm-hidden">{{ currentTime.weekday }}</span>
+      </div>
+      <div class="text">
+        <span>{{ currentTime.hour }}:{{ currentTime.minute }}:{{ currentTime.second }}</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -31,7 +20,6 @@
 import { getCurrentTime } from "@/utils/getTime";
 import { mainStore } from "@/store";
 import Music from "@/components/Music.vue";
-import Hitokoto from "@/components/Hitokoto.vue";
 
 const store = mainStore();
 
@@ -59,88 +47,49 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .function {
-  height: 165px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  &.mobile {
-    .el-row {
-      .el-col {
-        &:nth-of-type(1) {
-          display: contents;
-        }
-        &:nth-of-type(2) {
-          display: none;
-        }
-      }
+  .time-card {
+    position: fixed;
+    top: 96px;
+    right: 96px;
+    width: 250px;
+    padding: 16px 20px;
+    text-align: center;
+    animation: fade 0.5s;
+    z-index: 1;
+
+    .date {
+      font-size: 0.95rem;
+      text-overflow: ellipsis;
+      overflow-x: hidden;
+      white-space: nowrap;
     }
-  }
-  .el-row {
-    height: 100%;
-    width: 100%;
-    margin: 0 !important;
-    .el-col {
-      &:nth-of-type(1) {
-        padding-left: 0 !important;
-      }
-      &:nth-of-type(2) {
-        padding-right: 0 !important;
-      }
-      @media (max-width: 910px) {
-        &:nth-of-type(1) {
-          display: none;
-        }
-        &:nth-of-type(2) {
-          padding: 0 !important;
-          flex: none;
-          max-width: none;
-          width: 100%;
-        }
-      }
+
+    .text {
+      margin-top: 8px;
+      font-size: 2.65rem;
+      letter-spacing: 0;
+      line-height: 1;
+      font-family: "mao", "Microsoft YaHei", sans-serif;
     }
-    .left,
-    .right {
-      width: 100%;
-      height: 100%;
+
+    @media (max-width: 1200px) {
+      top: 84px;
+      right: 48px;
     }
-    .right {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      animation: fade 0.5s;
-      .time {
-        font-size: 1.1rem;
-        text-align: center;
-        .date {
-          text-overflow: ellipsis;
-          overflow-x: hidden;
-          white-space: nowrap;
-        }
-        .text {
-          margin-top: 10px;
-          font-size: 3.25rem;
-          letter-spacing: 2px;
-          font-family: "mao", "Microsoft YaHei", sans-serif;
-        }
-        @media (min-width: 1201px) and (max-width: 1280px) {
-          font-size: 1rem;
-        }
-        @media (min-width: 911px) and (max-width: 992px) {
-          font-size: 1rem;
-          .text {
-            font-size: 2.75rem;
-          }
-        }
+
+    @media (max-width: 720px) {
+      top: 68px;
+      right: 14px;
+      width: 156px;
+      padding: 9px 10px;
+
+      .date {
+        font-size: 0.72rem;
       }
-      .weather {
-        text-align: center;
-        width: 100%;
-        text-overflow: ellipsis;
-        overflow-x: hidden;
-        white-space: nowrap;
+
+      .text {
+        margin-top: 6px;
+        font-size: 1.65rem;
       }
     }
   }

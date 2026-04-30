@@ -29,10 +29,11 @@ const siteName =
   margin-left: 0.75rem;
   .logo {
     width: 100%;
+    overflow: visible;
     font-family: "title-script", "mao", "Microsoft YaHei", sans-serif;
     font-weight: 400;
     font-size: 3rem;
-    line-height: 1;
+    line-height: 1.18;
     position: fixed;
     top: 6%;
     left: 0;
@@ -49,8 +50,13 @@ const siteName =
       width: calc(100% + 6px);
       top: 43.26px; // 721px * 0.06
     }
+    @media (max-width: 720px) {
+      top: 5%;
+      font-size: 2.65rem;
+      padding: 0 18px;
+    }
     @media (max-width: 390px) {
-        width: 391px;
+      width: 391px;
     }
   }
   @media (max-width: 720px) {

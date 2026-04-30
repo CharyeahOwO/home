@@ -168,16 +168,17 @@ onBeforeUnmount(() => {
     justify-content: center;
     align-items: center;
     top: 84%;
-    left: calc(50% - 28px);
+    left: 50%;
     width: 56px;
     height: 34px;
     background: rgb(0 0 0 / 20%);
     backdrop-filter: blur(10px);
     border-radius: 6px;
     transition: transform 0.3s;
+    transform: translateX(-50%);
     animation: fade 0.5s;
     &:active {
-      transform: scale(0.95);
+      transform: translateX(-50%) scale(0.95);
     }
     .i-icon {
       transform: translateY(2px);
@@ -219,9 +220,9 @@ onBeforeUnmount(() => {
     }
     .menu {
       top: 605.64px; // 721px * 0.84
-      left: 170.5px; // 391 * 0.5 - 25px
+      left: 50%;
       @media (min-width: 391px) {
-        left: calc(50% - 25px);
+        left: 50%;
       }
     }
     .f-ter {
@@ -232,18 +233,46 @@ onBeforeUnmount(() => {
     }
   }
   @media (max-width: 390px) {
-    overflow-x: auto;
+    overflow-x: hidden;
     .container {
-      width: 391px;
+      width: 100%;
+      padding-left: 0;
+      padding-right: 0;
     }
     .menu {
-      left: 167.5px; // 391px * 0.5 - 28px
+      left: 50%;
     }
     .f-ter {
-      width: 391px;
+      width: 100%;
     }
     @media (min-height: 721px) {
       overflow-y: hidden;
+    }
+  }
+
+  @media (max-width: 720px) and (max-height: 720px) {
+    overflow: hidden;
+
+    .container {
+      height: 100dvh;
+
+      .all {
+        height: 100dvh;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+    }
+
+    .menu {
+      top: auto;
+      bottom: 76px;
+      left: 50%;
+    }
+
+    .f-ter {
+      top: auto;
+      bottom: 0;
+      width: 100%;
     }
   }
 }
