@@ -6,6 +6,8 @@
     </div>
     <!-- 功能区 -->
     <Func />
+    <!-- 移动端一言 -->
+    <MobileHitokoto />
     <!-- 网站链接 -->
     <Link />
   </div>
@@ -15,6 +17,7 @@
 import { mainStore } from "@/store";
 import Func from "@/views/Func/index.vue";
 import Link from "@/components/Links.vue";
+import MobileHitokoto from "@/components/MobileHitokoto.vue";
 const store = mainStore();
 
 // 站点名称

@@ -78,19 +78,7 @@ onBeforeUnmount(() => {
     }
 
     @media (max-width: 720px) {
-      top: 68px;
-      right: 14px;
-      width: 156px;
-      padding: 9px 10px;
-
-      .date {
-        font-size: 0.72rem;
-      }
-
-      .text {
-        margin-top: 6px;
-        font-size: 1.65rem;
-      }
+      display: none;
     }
   }
 }

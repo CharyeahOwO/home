@@ -227,6 +227,7 @@ onMounted(() => {
           text-align: center;
 
           .hitokoto-line {
+            display: none;
             align-items: center;
 
             .from {
