@@ -6,23 +6,9 @@ This is a customized personal homepage based on [imsyy/home](https://github.com/
 
 This version has been redesigned for the "Sakura Realm" theme. The background images have been replaced with a Luo Tianyi themed image set, with separate background pools for desktop and mobile devices.
 
-## Site Info
+## Preview
 
-- Site name: 樱落之境
-- Display name: Sakuya
-- Website: https://nyaovo.com
-- Site start date: January 9, 2026
-- ICP record: 赣ICP备2026003508号-2
-- GitHub: https://github.com/CharyeahOwO
-- Bilibili: https://space.bilibili.com/179607317
-
-## Current Links
-
-- Blog: https://mulingowo.cn
-- Memos: https://moment.mulingowo.cn
-- Status: https://status.mulingowo.cn
-- Start page: https://nyaovo.com
-- Music: built-in music player
+https://nyaovo.com/
 
 The original template links such as cloud drive, link collection, hot list, and other default external links have been removed.
 
@@ -144,3 +130,6 @@ The current production site is deployed in a Docker container. During updates, t
 This project is customized from [imsyy/home](https://github.com/imsyy/home). Thanks to the original author for the open-source homepage template.
 
 For the original features, deployment guide, and license information, please refer to the original repository.
+
+---
+Code:Codex-GPT-5.5

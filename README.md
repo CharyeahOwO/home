@@ -4,25 +4,11 @@
 
 这是一个基于 [imsyy/home](https://github.com/imsyy/home) 二次定制的个人主页，用于展示个人站点、常用链接、音乐播放和移动端首页效果。
 
-当前版本已经从原模板改成「樱落之境」主题，背景图换成了洛天依风格图集，并针对手机端和 PC 端分别做了适配。
+当前版本已经从原模板改成「樱落之境」主题，背景图换成了洛天依图集，并针对手机端和 PC 端分别做了适配。
 
-## 站点信息
+## 预览
 
-- 站点名称：樱落之境
-- 英文展示名：Sakuya
-- 站点地址：https://nyaovo.com
-- 建站时间：2026 年 1 月 9 日
-- 备案号：赣ICP备2026003508号-2
-- GitHub：https://github.com/CharyeahOwO
-- Bilibili：https://space.bilibili.com/179607317
-
-## 当前链接
-
-- 博客：https://mulingowo.cn
-- Memos：https://moment.mulingowo.cn
-- 站点监测：https://status.mulingowo.cn
-- 起始页：https://nyaovo.com
-- 音乐：站内音乐播放器
+https://nyaovo.com/
 
 原模板里的网盘、网址集、今日热榜和其它默认外部链接已移除。
 
@@ -135,9 +121,12 @@ docker run -p 12445:12445 -d home
 - IconPark
 - xicons
 - APlayer / Meting
-
 ## 原项目
 
 本项目基于 [imsyy/home](https://github.com/imsyy/home) 修改而来。感谢原作者提供的开源主页模板。
 
 如果需要原版功能、部署说明或许可证信息，请参考原仓库。
+
+---
+
+Code:Codex-GPT-5.5
