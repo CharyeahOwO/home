@@ -25,6 +25,16 @@
       >
         <component :is="store.mobileOpenState ? CloseSmall : HamburgerButton" />
       </Icon>
+      <button
+        class="bg-switch"
+        v-show="!store.backgroundShow && !store.setOpenState"
+        type="button"
+        title="切换背景"
+        aria-label="切换背景"
+        @click="switchBackground"
+      >
+        <refresh-one theme="outline" size="20" fill="#fff" />
+      </button>
       <!-- 页脚 -->
       <Transition name="fade" mode="out-in">
         <Footer class="f-ter" v-show="!store.backgroundShow && !store.setOpenState" />
@@ -35,7 +45,7 @@
 
 <script setup>
 import { helloInit, checkDays } from "@/utils/getTime.js";
-import { HamburgerButton, CloseSmall } from "@icon-park/vue-next";
+import { HamburgerButton, CloseSmall, RefreshOne } from "@icon-park/vue-next";
 import { mainStore } from "@/store";
 import { Icon } from "@vicons/utils";
 import Loading from "@/components/Loading.vue";
@@ -63,6 +73,10 @@ const loadComplete = () => {
     // 默哀模式
     checkDays();
   });
+};
+
+const switchBackground = () => {
+  window.dispatchEvent(new CustomEvent("switch-local-background"));
 };
 
 // 监听宽度变化
@@ -185,6 +199,51 @@ onBeforeUnmount(() => {
     }
     @media (min-width: 721px) {
       display: none;
+    }
+  }
+  .bg-switch {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid rgb(255 255 255 / 10%);
+    border-radius: 50%;
+    color: #fff;
+    background: rgb(0 0 0 / 20%);
+    backdrop-filter: blur(12px) saturate(1.08);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 12%),
+      0 8px 24px rgb(0 0 0 / 14%);
+    cursor: pointer;
+    transition:
+      transform 0.25s,
+      background 0.25s;
+    animation: fade 0.5s;
+
+    &:hover {
+      background: rgb(255 255 255 / 18%);
+      transform: rotate(18deg) scale(1.04);
+    }
+
+    &:active {
+      transform: rotate(36deg) scale(0.95);
+    }
+
+    .i-icon {
+      display: flex;
+    }
+
+    @media (max-width: 720px) {
+      top: 16px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
     }
   }
   @media (max-height: 720px) {

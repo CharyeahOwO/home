@@ -31,6 +31,7 @@ const store = mainStore();
 const bgUrl = ref(null);
 const imgTimeout = ref(null);
 const currentDeviceType = ref(null);
+const currentBgIndex = ref(0);
 const emit = defineEmits(["loadComplete"]);
 
 // 电脑壁纸
@@ -53,16 +54,27 @@ const mobileBackgrounds = [
 
 const defaultBackground = desktopBackgrounds[0];
 const getDeviceType = () => (window.innerWidth <= 720 ? "mobile" : "desktop");
-const getRandomBackground = () => {
-  const backgrounds = getDeviceType() === "mobile" ? mobileBackgrounds : desktopBackgrounds;
-  return backgrounds[Math.floor(Math.random() * backgrounds.length)];
+const getBackgrounds = () => (getDeviceType() === "mobile" ? mobileBackgrounds : desktopBackgrounds);
+const setRandomBackground = () => {
+  const backgrounds = getBackgrounds();
+  currentBgIndex.value = Math.floor(Math.random() * backgrounds.length);
+  bgUrl.value = backgrounds[currentBgIndex.value];
+};
+const switchLocalBackground = () => {
+  if (store.coverType != "0") {
+    store.coverType = "0";
+  }
+  currentDeviceType.value = getDeviceType();
+  const backgrounds = getBackgrounds();
+  currentBgIndex.value = (currentBgIndex.value + 1) % backgrounds.length;
+  bgUrl.value = backgrounds[currentBgIndex.value];
 };
 
 // 更换壁纸链接
 const changeBg = (type) => {
   if (type == 0) {
     currentDeviceType.value = getDeviceType();
-    bgUrl.value = getRandomBackground();
+    setRandomBackground();
   } else if (type == 1) {
     bgUrl.value = "https://api.dujin.org/bing/1920.php";
   } else if (type == 2) {
@@ -107,7 +119,7 @@ const handleResize = () => {
   const nextDeviceType = getDeviceType();
   if (nextDeviceType !== currentDeviceType.value) {
     currentDeviceType.value = nextDeviceType;
-    bgUrl.value = getRandomBackground();
+    setRandomBackground();
   }
 };
 
@@ -123,11 +135,13 @@ onMounted(() => {
   // 加载壁纸
   changeBg(store.coverType);
   window.addEventListener("resize", handleResize);
+  window.addEventListener("switch-local-background", switchLocalBackground);
 });
 
 onBeforeUnmount(() => {
   clearTimeout(imgTimeout.value);
   window.removeEventListener("resize", handleResize);
+  window.removeEventListener("switch-local-background", switchLocalBackground);
 });
 </script>
 
