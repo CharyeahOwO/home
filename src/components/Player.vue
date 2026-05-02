@@ -137,6 +137,10 @@ const onPause = () => {
 
 // 音频时间更新事件
 const onTimeUp = () => {
+  const audio = player.value?.audioRef;
+  if (audio) {
+    store.setPlayerProgress(audio.currentTime, audio.duration);
+  }
   let lyrics = player.value.aplayer.lyrics[playIndex.value];
   let lyricIndex = player.value.aplayer.lyricIndex;
   if (!lyrics || !lyrics[lyricIndex]) {
@@ -169,9 +173,29 @@ const changeSong = (type) => {
   });
 };
 
+const seekTo = (event) => {
+  const time = Number(event.detail?.time);
+  const audio = player.value?.audioRef;
+  if (!audio || !Number.isFinite(time)) return;
+  if (typeof player.value.aplayer?.seek === "function") {
+    player.value.aplayer.seek(time);
+  } else {
+    audio.currentTime = time;
+  }
+  store.setPlayerProgress(audio.currentTime, audio.duration);
+};
+
 // 切换歌曲列表状态
 const toggleList = () => {
   player.value.toggleList();
+};
+
+const showList = () => {
+  player.value?.showList?.();
+};
+
+const hideList = () => {
+  player.value?.hideList?.();
 };
 
 // 加载音频错误
@@ -196,8 +220,16 @@ const loadMusicError = () => {
   );
 };
 
+onMounted(() => {
+  window.addEventListener("player-seek", seekTo);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("player-seek", seekTo);
+});
+
 // 暴露子组件方法
-defineExpose({ playToggle, changeVolume, changeSong, toggleList });
+defineExpose({ playToggle, changeVolume, changeSong, toggleList, showList, hideList });
 </script>
 
 <style lang="scss" scoped>

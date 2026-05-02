@@ -20,6 +20,8 @@ export const mainStore = defineStore("main", {
       playerTitle: null, // 当前播放歌曲名
       playerArtist: null, // 当前播放歌手名
       playerLrc: "歌词加载中", // 当前播放歌词
+      playerCurrentTime: 0,
+      playerDuration: 0,
       playerLrcShow: true, // 是否显示底栏歌词
       footerBlur: true, // 底栏模糊
       playerAutoplay: false, // 是否自动播放
@@ -37,6 +39,15 @@ export const mainStore = defineStore("main", {
       return {
         name: state.playerTitle,
         artist: state.playerArtist,
+      };
+    },
+    getPlayerProgress(state) {
+      const duration = Number.isFinite(state.playerDuration) ? state.playerDuration : 0;
+      const current = Number.isFinite(state.playerCurrentTime) ? state.playerCurrentTime : 0;
+      return {
+        current,
+        duration,
+        percent: duration > 0 ? Math.min(100, Math.max(0, (current / duration) * 100)) : 0,
       };
     },
     // 获取页面宽度
@@ -69,6 +80,10 @@ export const mainStore = defineStore("main", {
     setPlayerData(title, artist) {
       this.playerTitle = title;
       this.playerArtist = artist;
+    },
+    setPlayerProgress(current, duration) {
+      this.playerCurrentTime = current || 0;
+      this.playerDuration = duration || 0;
     },
     // 更改壁纸加载状态
     setImgLoadStatus(value) {
