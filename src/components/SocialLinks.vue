@@ -44,7 +44,7 @@ const handleSocialClick = async (item, event) => {
   event.preventDefault();
   await copyText(item.value);
   ElMessage({
-    message: `已复制微信号：${item.value}`,
+    message: `已复制${item.name}：${item.value}`,
     grouping: true,
   });
 };

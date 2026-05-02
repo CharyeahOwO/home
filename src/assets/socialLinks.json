@@ -15,7 +15,8 @@
     "name": "QQ",
     "icon": "/images/icon/qq.png",
     "tip": "QQ：2971087216",
-    "url": "https://wpa.qq.com/msgrd?v=3&uin=2971087216&site=qq&menu=yes"
+    "value": "2971087216",
+    "action": "copy"
   },
   {
     "name": "Email",

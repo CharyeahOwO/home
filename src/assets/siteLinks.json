@@ -15,6 +15,11 @@
     "link": "https://status.mulingowo.cn/"
   },
   {
+    "icon": "Cloud",
+    "name": "API 聚合",
+    "link": "https://api.nyaovo.com/"
+  },
+  {
     "icon": "CompactDisc",
     "name": "音乐",
     "link": "player"
