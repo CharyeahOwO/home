@@ -18,6 +18,12 @@
     "url": "https://wpa.qq.com/msgrd?v=3&uin=2971087216&site=qq&menu=yes"
   },
   {
+    "name": "Email",
+    "icon": "/images/icon/email.png",
+    "tip": "邮箱：2971087216@qq.com",
+    "url": "mailto:2971087216@qq.com"
+  },
+  {
     "name": "WeChat",
     "icon": "/images/icon/wechat.svg",
     "tip": "微信：MutsukiOwO",
