@@ -102,7 +102,7 @@ pnpm build
 
 ## Docker 部署
 
-Docker 镜像地址：`ghcr.io/charyeahowo/home`
+Docker 镜像地址：`ghcr.io/charyeahowo/home:latest`
 
 ```bash
 docker build -t home .
