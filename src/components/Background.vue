@@ -6,7 +6,7 @@
       class="bg"
       alt="cover"
       @load="imgLoadComplete"
-      @error.once="imgLoadError"
+      @error="imgLoadError"
       @animationend="imgAnimationEnd"
     />
     <div :class="store.backgroundShow ? 'gray hidden' : 'gray'" />
@@ -31,7 +31,9 @@ const store = mainStore();
 const bgUrl = ref(null);
 const imgTimeout = ref(null);
 const currentDeviceType = ref(null);
+const loadRetryCount = ref(0);
 const emit = defineEmits(["loadComplete"]);
+const maxLoadRetry = 5;
 
 const getDeviceType = () => (window.innerWidth <= 720 ? "mobile" : "desktop");
 const getBackgroundUrl = () => {
@@ -40,11 +42,13 @@ const getBackgroundUrl = () => {
 };
 const switchBackground = () => {
   currentDeviceType.value = getDeviceType();
+  loadRetryCount.value = 0;
   bgUrl.value = getBackgroundUrl();
 };
 
 // 图片加载完成
 const imgLoadComplete = () => {
+  loadRetryCount.value = 0;
   imgTimeout.value = setTimeout(
     () => {
       store.setImgLoadStatus(true);
@@ -63,20 +67,26 @@ const imgAnimationEnd = () => {
 // 图片显示失败
 const imgLoadError = () => {
   console.error("壁纸加载失败：", bgUrl.value);
-  ElMessage({
-    message: "壁纸加载失败，正在重新获取",
-    icon: h(Error, {
-      theme: "filled",
-      fill: "#efefef",
-    }),
-  });
-  bgUrl.value = getBackgroundUrl();
+  loadRetryCount.value += 1;
+  if (loadRetryCount.value <= maxLoadRetry) {
+    ElMessage({
+      message: "壁纸加载失败，正在重新获取",
+      icon: h(Error, {
+        theme: "filled",
+        fill: "#efefef",
+      }),
+    });
+    bgUrl.value = getBackgroundUrl();
+    return;
+  }
+  store.setImgLoadStatus(true);
 };
 
 const handleResize = () => {
   const nextDeviceType = getDeviceType();
   if (nextDeviceType !== currentDeviceType.value) {
     currentDeviceType.value = nextDeviceType;
+    loadRetryCount.value = 0;
     bgUrl.value = getBackgroundUrl();
   }
 };

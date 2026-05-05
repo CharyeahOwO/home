@@ -105,6 +105,8 @@ The production files will be generated in the `dist` directory.
 
 ## Docker Deployment
 
+Docker image: `ghcr.io/charyeahowo/home`
+
 ```bash
 docker build -t home .
 docker run -p 12445:12445 -d home
