@@ -10,13 +10,19 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+.vite
+coverage
 *.local
+.env
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
+.playwright-mcp/
+playwright-report/
+test-results/
 *.suo
 *.ntvs*
 *.njsproj

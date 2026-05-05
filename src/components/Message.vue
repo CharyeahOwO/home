@@ -3,10 +3,9 @@
   <div class="message">
     <!-- Logo -->
     <div class="logo">
-      <img class="logo-img" :src="siteLogo" alt="logo" />
-      <div :class="{ name: true, 'text-hidden': true, long: siteUrl[0].length >= 6 }">
-        <span class="bg">{{ siteUrl[0] }}</span>
-        <span class="sm">.{{ siteUrl[1] }}</span>
+      <div class="name text-hidden">
+        <span class="bg">{{ siteName }}</span>
+        <span class="sub">{{ siteSubName }}</span>
       </div>
     </div>
     <!-- 简介 -->
@@ -15,10 +14,16 @@
         <Icon size="16">
           <QuoteLeft />
         </Icon>
-        <div class="text">
-          <p>{{ descriptionText.hello }}</p>
-          <p>{{ descriptionText.text }}</p>
-        </div>
+        <Transition name="fade" mode="out-in">
+          <div :key="descriptionText.hello + descriptionText.text" class="text">
+            <p>{{ descriptionText.hello }}</p>
+            <p>{{ descriptionText.text }}</p>
+            <div class="hitokoto-line">
+              <span>{{ hitokotoData.text }}</span>
+              <span class="from">-「&nbsp;{{ hitokotoData.from }}&nbsp;」</span>
+            </div>
+          </div>
+        </Transition>
         <Icon size="16">
           <QuoteRight />
         </Icon>
@@ -31,22 +36,14 @@
 import { Icon } from "@vicons/utils";
 import { QuoteLeft, QuoteRight } from "@vicons/fa";
 import { Error } from "@icon-park/vue-next";
+import { getHitokoto } from "@/api";
 import { mainStore } from "@/store";
 const store = mainStore();
 
-// 主页站点logo
-const siteLogo = import.meta.env.VITE_SITE_MAIN_LOGO;
-// 站点链接
-const siteUrl = computed(() => {
-  const url = import.meta.env.VITE_SITE_URL;
-  if (!url) return "imsyy.top".split(".");
-  // 判断协议前缀
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    const urlFormat = url.replace(/^(https?:\/\/)/, "");
-    return urlFormat.split(".");
-  }
-  return url.split(".");
-});
+// 主页显示名称
+const siteName =
+  import.meta.env.VITE_SITE_DISPLAY_NAME || import.meta.env.VITE_SITE_NAME || "Sakura Realm";
+const siteSubName = import.meta.env.VITE_SITE_NAME || "樱落之境";
 
 // 简介区域文字
 const descriptionText = reactive({
@@ -54,9 +51,24 @@ const descriptionText = reactive({
   text: import.meta.env.VITE_DESC_TEXT,
 });
 
+const hitokotoData = reactive({
+  text: "星光落在未写完的故事里。",
+  from: "樱落之境",
+});
+
+const getHitokotoData = async () => {
+  try {
+    const result = await getHitokoto();
+    hitokotoData.text = result.hitokoto;
+    hitokotoData.from = result.from;
+  } catch (error) {
+    console.error("一言获取失败", error);
+  }
+};
+
 // 切换右侧功能区
 const changeBox = () => {
-  if (store.getInnerWidth >= 990) {
+  if (store.getInnerWidth >= 721) {
     store.boxOpenState = !store.boxOpenState;
   } else {
     ElMessage({
@@ -83,6 +95,10 @@ watch(
     }
   },
 );
+
+onMounted(() => {
+  getHitokotoData();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -91,38 +107,56 @@ watch(
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     animation: fade 0.5s;
     max-width: 460px;
-    .logo-img {
-      border-radius: 50%;
-      width: 120px;
-    }
+
     .name {
-      width: 100%;
-      padding-left: 22px;
-      transform: translateY(-8px);
-      font-family: "Pacifico-Regular";
+      width: auto;
+      overflow: visible;
+      padding-left: 0;
+      transform: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: "title-script", "mao", "Microsoft YaHei", sans-serif;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-shadow: 0 4px 24px rgb(255 190 210 / 45%);
 
       .bg {
-        font-size: 5rem;
+        font-size: 4.85rem;
+        line-height: 1.12;
+        padding: 0 0.32em 0.04em;
+        overflow: visible;
       }
 
-      .sm {
-        margin-left: 6px;
-        font-size: 2rem;
-        @media (min-width: 720px) and (max-width: 789px) {
-          display: none;
-        }
+      .sub {
+        margin-top: 0.15rem;
+        font-family: "mao", "Microsoft YaHei", sans-serif;
+        font-size: 1rem;
+        opacity: 0.82;
+        text-shadow: 0 2px 12px rgb(0 0 0 / 35%);
       }
     }
     @media (max-width: 768px) {
-      .logo-img {
-        width: 100px;
-      }
+      justify-content: center;
+
       .name {
+        width: auto;
         height: 128px;
+        padding-left: 0;
+        display: flex;
+        align-items: center;
+        transform: none;
+
         .bg {
-          font-size: 4.5rem;
+          font-size: 3.85rem;
+          padding: 0 0.32em 0.04em;
+        }
+
+        .sub {
+          font-size: 0.95rem;
         }
       }
     }
@@ -146,10 +180,29 @@ watch(
         margin: 0.75rem 1rem;
         line-height: 2rem;
         margin-right: auto;
+        transition: opacity 0.2s;
 
         p {
           &:nth-of-type(1) {
-            font-family: "Pacifico-Regular";
+            font-family: "title-script", "mao", "Microsoft YaHei", sans-serif;
+            font-size: 1.35rem;
+            font-weight: 400;
+          }
+        }
+
+        .hitokoto-line {
+          margin-top: 0.75rem;
+          padding-top: 0.75rem;
+          border-top: 1px solid rgb(255 255 255 / 18%);
+          display: flex;
+          flex-direction: column;
+          line-height: 1.65;
+          opacity: 0.92;
+
+          .from {
+            align-self: flex-end;
+            margin-top: 0.25rem;
+            font-weight: 700;
           }
         }
       }
@@ -159,32 +212,74 @@ watch(
       }
     }
     @media (max-width: 720px) {
-      max-width: 100%;
+      width: min(94%, 360px);
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 1rem 1.15rem;
       pointer-events: none;
-    }
-  }
-  @media (max-width: 390px) {
-    .logo {
-      flex-direction: column;
-      .logo-img {
-        display: none;
-      }
-      .name {
-        margin-left: 0;
-        height: auto;
-        transform: none;
-        text-align: center;
-        .bg {
-          font-size: 3.5rem;
-        }
-        .sm {
-          font-size: 1.4rem;
+
+      .content {
+        .text {
+          width: 100%;
+          margin: 0.65rem 0.5rem;
+          line-height: 1.85rem;
+          text-align: center;
+
+          .hitokoto-line {
+            display: none;
+            align-items: center;
+
+            .from {
+              align-self: center;
+            }
+          }
         }
       }
     }
-    .description {
-      margin-top: 2.5rem;
+
+    @media (max-width: 390px) {
+      width: 94%;
+      padding: 0.9rem 0.95rem;
+
+      .content {
+        .text {
+          margin-left: 0.35rem;
+          margin-right: 0.35rem;
+          line-height: 1.75rem;
+          font-size: 0.95rem;
+
+          p {
+            &:nth-of-type(1) {
+              font-size: 1.2rem;
+            }
+          }
+        }
+      }
     }
   }
+  // @media (max-width: 390px) {
+  //   .logo {
+  //     flex-direction: column;
+  //     .logo-img {
+  //       display: none;
+  //     }
+  //     .name {
+  //       margin-left: 0;
+  //       height: auto;
+  //       transform: none;
+  //       text-align: center;
+  //       .bg {
+  //         font-size: 3.5rem;
+  //       }
+  //       .sm {
+  //         font-size: 1.4rem;
+  //       }
+  //     }
+  //   }
+  //   .description {
+  //     margin-top: 2.5rem;
+  //   }
+  // }
 }
 </style>

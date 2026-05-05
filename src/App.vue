@@ -25,16 +25,27 @@
       >
         <component :is="store.mobileOpenState ? CloseSmall : HamburgerButton" />
       </Icon>
+      <button
+        class="bg-switch"
+        v-show="!store.backgroundShow && !store.setOpenState"
+        type="button"
+        title="切换背景"
+        aria-label="切换背景"
+        @click="switchBackground"
+      >
+        <refresh-one theme="outline" size="20" fill="#fff" />
+      </button>
       <!-- 页脚 -->
       <Transition name="fade" mode="out-in">
-        <Footer v-show="!store.backgroundShow && !store.setOpenState" />
+        <Footer class="f-ter" v-show="!store.backgroundShow && !store.setOpenState" />
       </Transition>
     </main>
   </Transition>
 </template>
+
 <script setup>
 import { helloInit, checkDays } from "@/utils/getTime.js";
-import { HamburgerButton, CloseSmall } from "@icon-park/vue-next";
+import { HamburgerButton, CloseSmall, RefreshOne } from "@icon-park/vue-next";
 import { mainStore } from "@/store";
 import { Icon } from "@vicons/utils";
 import Loading from "@/components/Loading.vue";
@@ -64,12 +75,17 @@ const loadComplete = () => {
   });
 };
 
+const switchBackground = () => {
+  window.dispatchEvent(new CustomEvent("switch-background"));
+};
+
 // 监听宽度变化
 watch(
   () => store.innerWidth,
   (value) => {
-    if (value < 990) {
+    if (value < 721) {
       store.boxOpenState = false;
+      store.setOpenState = false;
     }
   },
 );
@@ -104,17 +120,13 @@ onMounted(() => {
   window.addEventListener("resize", getWidth);
 
   // 控制台输出
-  const styleTitle1 = "font-size: 20px;font-weight: 600;color: rgb(244,167,89);";
-  const styleTitle2 = "font-size:12px;color: rgb(244,167,89);";
-  const styleContent = "color: rgb(30,152,255);";
-  const title1 = "無名の主页";
+  const styleTitle1 = "font-size: 20px;font-weight: 600;color: rgb(255,183,205);";
+  const styleTitle2 = "font-size:12px;color: rgb(255,214,226);";
+  const styleContent = "color: rgb(103,158,166);";
+  const title1 = "樱落之境";
   const title2 = `
- _____ __  __  _______     ____     __
-|_   _|  \\/  |/ ____\\ \\   / /\\ \\   / /
-  | | | \\  / | (___  \\ \\_/ /  \\ \\_/ /
-  | | | |\\/| |\\___ \\  \\   /    \\   /
- _| |_| |  | |____) |  | |      | |
-|_____|_|  |_|_____/   |_|      |_|`;
+   Sakura Realm
+   mulingowo.cn`;
   const content = `\n\n版本: ${config.version}\n主页: ${config.home}\nGithub: ${config.github}`;
   console.info(`%c${title1} %c${title2} %c${content}`, styleTitle1, styleTitle2, styleContent);
 });
@@ -139,6 +151,7 @@ onBeforeUnmount(() => {
     width: 100%;
     height: 100vh;
     margin: 0 auto;
+    padding: 0 0.5vw;
     .all {
       width: 100%;
       height: 100%;
@@ -164,27 +177,161 @@ onBeforeUnmount(() => {
     }
   }
   .menu {
-    position: fixed;
+    position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
     top: 84%;
-    left: calc(50% - 28px);
+    left: 50%;
     width: 56px;
     height: 34px;
     background: rgb(0 0 0 / 20%);
     backdrop-filter: blur(10px);
     border-radius: 6px;
     transition: transform 0.3s;
+    transform: translateX(-50%);
     animation: fade 0.5s;
     &:active {
-      transform: scale(0.95);
+      transform: translateX(-50%) scale(0.95);
     }
     .i-icon {
       transform: translateY(2px);
     }
     @media (min-width: 721px) {
       display: none;
+    }
+  }
+  .bg-switch {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid rgb(255 255 255 / 10%);
+    border-radius: 50%;
+    color: #fff;
+    background: rgb(0 0 0 / 20%);
+    backdrop-filter: blur(12px) saturate(1.08);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 12%),
+      0 8px 24px rgb(0 0 0 / 14%);
+    cursor: pointer;
+    transition:
+      transform 0.25s,
+      background 0.25s;
+    animation: fade 0.5s;
+
+    &:hover {
+      background: rgb(255 255 255 / 18%);
+      transform: rotate(18deg) scale(1.04);
+    }
+
+    &:active {
+      transform: rotate(36deg) scale(0.95);
+    }
+
+    .i-icon {
+      display: flex;
+    }
+
+    @media (max-width: 720px) {
+      top: 16px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+    }
+  }
+  @media (max-height: 720px) {
+    overflow-y: auto;
+    overflow-x: hidden;
+    .container {
+      height: 721px;
+      .more {
+        height: 721px;
+        width: calc(100% + 6px);
+      }
+      @media (min-width: 391px) {
+        // w 1201px ~ max
+        padding-left: 0.7vw;
+        padding-right: 0.25vw;
+        @media (max-width: 1200px) { // w 1101px ~ 1280px
+          padding-left: 2.3vw;
+          padding-right: 1.75vw;
+        }
+        @media (max-width: 1100px) { // w 993px ~ 1100px
+          padding-left: 2vw;
+          padding-right: calc(2vw - 6px);
+        }
+        @media (max-width: 992px) { // w 901px ~ 992px
+          padding-left: 2.3vw;
+          padding-right: 1.7vw;
+        }
+        @media (max-width: 900px) { // w 391px ~ 900px
+          padding-left: 2vw;
+          padding-right: calc(2vw - 6px);
+        }
+      }
+    }
+    .menu {
+      top: 605.64px; // 721px * 0.84
+      left: 50%;
+      @media (min-width: 391px) {
+        left: 50%;
+      }
+    }
+    .f-ter {
+      top: 675px; // 721px - 46px
+      @media (min-width: 391px) {
+        padding-left: 6px;
+      }
+    }
+  }
+  @media (max-width: 390px) {
+    overflow-x: hidden;
+    .container {
+      width: 100%;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .menu {
+      left: 50%;
+    }
+    .f-ter {
+      width: 100%;
+    }
+    @media (min-height: 721px) {
+      overflow-y: hidden;
+    }
+  }
+
+  @media (max-width: 720px) and (max-height: 720px) {
+    overflow: hidden;
+
+    .container {
+      height: 100dvh;
+
+      .all {
+        height: 100dvh;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+    }
+
+    .menu {
+      top: auto;
+      bottom: 76px;
+      left: 50%;
+    }
+
+    .f-ter {
+      top: auto;
+      bottom: 0;
+      width: 100%;
     }
   }
 }

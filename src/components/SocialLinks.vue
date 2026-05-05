@@ -5,10 +5,11 @@
       <a
         v-for="item in socialLinks"
         :key="item.name"
-        :href="item.url"
+        :href="item.url || '#'"
         target="_blank"
         @mouseenter="socialTip = item.tip"
         @mouseleave="socialTip = '通过这里联系我吧'"
+        @click="handleSocialClick(item, $event)"
       >
         <img class="icon" :src="item.icon" height="24" />
       </a>
@@ -22,6 +23,31 @@ import socialLinks from "@/assets/socialLinks.json";
 
 // 社交链接提示
 const socialTip = ref("通过这里联系我吧");
+
+const copyText = async (text) => {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  document.body.removeChild(textarea);
+};
+
+const handleSocialClick = async (item, event) => {
+  if (item.action !== "copy") return;
+  event.preventDefault();
+  await copyText(item.value);
+  ElMessage({
+    message: `已复制${item.name}：${item.value}`,
+    grouping: true,
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -77,7 +103,7 @@ const socialTip = ref("通过这里联系我吧");
   }
   @media (min-width: 768px) {
     &:hover {
-      background-color: #00000040;
+      background-color: #00000026;
       backdrop-filter: blur(5px);
       .tip {
         display: block;

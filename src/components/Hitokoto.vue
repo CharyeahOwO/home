@@ -41,27 +41,26 @@ const openMusicShow = ref(false);
 // 一言数据
 const hitokotoData = reactive({
   text: "这里应该显示一句话",
-  from: "無名",
+  from: "樱落之境",
 });
 
 // 获取一言数据
-const getHitokotoData = () => {
-  getHitokoto()
-    .then((res) => {
-      hitokotoData.text = res.hitokoto;
-      hitokotoData.from = res.from;
-    })
-    .catch(() => {
-      ElMessage({
-        message: "一言获取失败",
-        icon: h(Error, {
-          theme: "filled",
-          fill: "#efefef",
-        }),
-      });
-      hitokotoData.text = "这里应该显示一句话";
-      hitokotoData.from = "無名";
+const getHitokotoData = async () => {
+  try {
+    const result = await getHitokoto();
+    hitokotoData.text = result.hitokoto;
+    hitokotoData.from = result.from;
+  } catch (error) {
+    ElMessage({
+      message: "一言获取失败",
+      icon: h(Error, {
+        theme: "filled",
+        fill: "#efefef",
+      }),
     });
+    hitokotoData.text = "这里应该显示一句话";
+    hitokotoData.from = "樱落之境";
+  }
 };
 
 // 更新一言数据

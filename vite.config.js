@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { defineConfig, loadEnv } from "vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import { resolve } from "path";
@@ -105,8 +106,9 @@ export default ({ mode }) =>
     css: {
       preprocessorOptions: {
         scss: {
-          charset: false,
-          additionalData: `@import "./src/style/global.scss";`,
+          api: 'modern',
+          additionalData: `@use "./src/style/global.scss" as *;`,
+          silenceDeprecations: ["legacy-js-api"],
         },
       },
     },

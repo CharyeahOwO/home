@@ -2,11 +2,12 @@
   <div :class="store.mobileOpenState ? 'right' : 'right hidden'">
     <!-- 移动端 Logo -->
     <div class="logo text-hidden" @click="store.mobileFuncState = !store.mobileFuncState">
-      <span class="bg">{{ siteUrl[0] }}</span>
-      <span class="sm">.{{ siteUrl[1] }}</span>
+      <span class="bg">{{ siteName }}</span>
     </div>
     <!-- 功能区 -->
     <Func />
+    <!-- 移动端一言 -->
+    <MobileHitokoto />
     <!-- 网站链接 -->
     <Link />
   </div>
@@ -16,19 +17,12 @@
 import { mainStore } from "@/store";
 import Func from "@/views/Func/index.vue";
 import Link from "@/components/Links.vue";
+import MobileHitokoto from "@/components/MobileHitokoto.vue";
 const store = mainStore();
 
-// 站点链接
-const siteUrl = computed(() => {
-  const url = import.meta.env.VITE_SITE_URL;
-  if (!url) return "imsyy.top".split(".");
-  // 判断协议前缀
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    const urlFormat = url.replace(/^(https?:\/\/)/, "");
-    return urlFormat.split(".");
-  }
-  return url.split(".");
-});
+// 站点名称
+const siteName =
+  import.meta.env.VITE_SITE_DISPLAY_NAME || import.meta.env.VITE_SITE_NAME || "Sakura Realm";
 </script>
 
 <style lang="scss" scoped>
@@ -38,8 +32,11 @@ const siteUrl = computed(() => {
   margin-left: 0.75rem;
   .logo {
     width: 100%;
-    font-family: "Pacifico-Regular";
-    font-size: 1.75rem;
+    overflow: visible;
+    font-family: "title-script", "mao", "Microsoft YaHei", sans-serif;
+    font-weight: 400;
+    font-size: 3rem;
+    line-height: 1.18;
     position: fixed;
     top: 6%;
     left: 0;
@@ -49,8 +46,20 @@ const siteUrl = computed(() => {
     &:active {
       transform: scale(0.95);
     }
-    @media (min-width: 720px) {
+    @media (min-width: 721px) {
       display: none;
+    }
+    @media (max-height: 720px) {
+      width: calc(100% + 6px);
+      top: 43.26px; // 721px * 0.06
+    }
+    @media (max-width: 720px) {
+      top: 5%;
+      font-size: 2.65rem;
+      padding: 0 18px;
+    }
+    @media (max-width: 390px) {
+      width: 391px;
     }
   }
   @media (max-width: 720px) {

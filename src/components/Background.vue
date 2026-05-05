@@ -2,9 +2,9 @@
   <div :class="store.backgroundShow ? 'cover show' : 'cover'">
     <img
       v-show="store.imgLoadStatus"
+      :src="bgUrl"
       class="bg"
       alt="cover"
-      :src="bgUrl"
       @load="imgLoadComplete"
       @error.once="imgLoadError"
       @animationend="imgAnimationEnd"
@@ -12,7 +12,7 @@
     <div :class="store.backgroundShow ? 'gray hidden' : 'gray'" />
     <Transition name="fade" mode="out-in">
       <a
-        v-if="store.backgroundShow && store.coverType != '3'"
+        v-if="store.backgroundShow"
         class="down"
         :href="bgUrl"
         target="_blank"
@@ -30,23 +30,17 @@ import { Error } from "@icon-park/vue-next";
 const store = mainStore();
 const bgUrl = ref(null);
 const imgTimeout = ref(null);
+const currentDeviceType = ref(null);
 const emit = defineEmits(["loadComplete"]);
 
-// 壁纸随机数
-// 请依据文件夹内的图片个数修改 Math.random() 后面的第一个数字
-const bgRandom = Math.floor(Math.random() * 10 + 1);
-
-// 更换壁纸链接
-const changeBg = (type) => {
-  if (type == 0) {
-    bgUrl.value = `/images/background${bgRandom}.jpg`;
-  } else if (type == 1) {
-    bgUrl.value = "https://api.dujin.org/bing/1920.php";
-  } else if (type == 2) {
-    bgUrl.value = "https://api.aixiaowai.cn/gqapi/gqapi.php";
-  } else if (type == 3) {
-    bgUrl.value = "https://api.aixiaowai.cn/api/api.php";
-  }
+const getDeviceType = () => (window.innerWidth <= 720 ? "mobile" : "desktop");
+const getBackgroundUrl = () => {
+  const device = getDeviceType() === "mobile" ? "mobile" : "pc";
+  return `https://api.nyaovo.com/image/api/random?device=${device}&t=${Date.now()}`;
+};
+const switchBackground = () => {
+  currentDeviceType.value = getDeviceType();
+  bgUrl.value = getBackgroundUrl();
 };
 
 // 图片加载完成
@@ -70,22 +64,34 @@ const imgAnimationEnd = () => {
 const imgLoadError = () => {
   console.error("壁纸加载失败：", bgUrl.value);
   ElMessage({
-    message: "壁纸加载失败，已临时切换回默认",
+    message: "壁纸加载失败，正在重新获取",
     icon: h(Error, {
       theme: "filled",
       fill: "#efefef",
     }),
   });
-  bgUrl.value = `/images/background${bgRandom}.jpg`;
+  bgUrl.value = getBackgroundUrl();
+};
+
+const handleResize = () => {
+  const nextDeviceType = getDeviceType();
+  if (nextDeviceType !== currentDeviceType.value) {
+    currentDeviceType.value = nextDeviceType;
+    bgUrl.value = getBackgroundUrl();
+  }
 };
 
 onMounted(() => {
   // 加载壁纸
-  changeBg(store.coverType);
+  switchBackground();
+  window.addEventListener("resize", handleResize);
+  window.addEventListener("switch-background", switchBackground);
 });
 
 onBeforeUnmount(() => {
   clearTimeout(imgTimeout.value);
+  window.removeEventListener("resize", handleResize);
+  window.removeEventListener("switch-background", switchBackground);
 });
 </script>
 
@@ -115,7 +121,7 @@ onBeforeUnmount(() => {
     transition:
       filter 0.3s,
       transform 0.3s;
-    animation: fade-blur-in 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation: fade-blur-in 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
     animation-delay: 0.45s;
   }
   .gray {
