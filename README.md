@@ -102,6 +102,8 @@ pnpm build
 
 ## Docker 部署
 
+Docker 镜像地址：`ghcr.io/charyeahowo/home`
+
 ```bash
 docker build -t home .
 docker run -p 12445:12445 -d home
