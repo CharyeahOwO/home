@@ -76,7 +76,7 @@ const loadComplete = () => {
 };
 
 const switchBackground = () => {
-  window.dispatchEvent(new CustomEvent("switch-local-background"));
+  window.dispatchEvent(new CustomEvent("switch-background"));
 };
 
 // 监听宽度变化

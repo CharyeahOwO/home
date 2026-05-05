@@ -4,7 +4,7 @@ English | [简体中文](./README.md)
 
 This is a customized personal homepage based on [imsyy/home](https://github.com/imsyy/home). It is used as a personal start page with site links, social links, music playback, responsive backgrounds, and mobile-friendly layout.
 
-This version has been redesigned for the "Sakura Realm" theme. The background images have been replaced with a Luo Tianyi themed image set, with separate background pools for desktop and mobile devices.
+This version has been redesigned for the "Sakura Realm" theme. Backgrounds are loaded from remote random image APIs, with separate requests for desktop and mobile devices.
 
 ## Preview
 
@@ -19,8 +19,8 @@ The original template links such as cloud drive, link collection, hot list, and 
 - Kept the Chinese subtitle `樱落之境` under the title.
 - Changed the main Chinese font to `mao`.
 - Added a local script font for the title and signature text.
-- Replaced the background images with a Luo Tianyi themed image set.
-- Split background images into desktop and mobile folders for better cropping.
+- Replaced local background images with remote random image APIs.
+- Split background requests by desktop and mobile devices for better cropping.
 - Added a top-right background switch button for both desktop and mobile.
 - Removed the old clock-style homepage logo from the main view.
 - Kept the generated moon-and-sakura logo as the browser favicon.
@@ -36,19 +36,16 @@ The original template links such as cloud drive, link collection, hot list, and 
 
 ## Background Images
 
-Background files are stored in:
+Backgrounds are loaded from remote random image APIs. The logic is in:
 
 ```text
-public/images/backgrounds/desktop/
-public/images/backgrounds/mobile/
+src/components/Background.vue
 ```
 
 They are split by device type:
 
-- Desktop backgrounds: `desktop-01`, `desktop-02`, `desktop-03`, etc.
-- Mobile backgrounds: `mobile-01`, `mobile-02`, `mobile-03`, etc.
-
-To add or replace backgrounds later, place the images in the matching folder and update the background list in `src/components/Background.vue`.
+- Desktop backgrounds: `https://api.nyaovo.com/image/api/random?device=pc`
+- Mobile backgrounds: `https://api.nyaovo.com/image/api/random?device=mobile`
 
 ## Configuration
 

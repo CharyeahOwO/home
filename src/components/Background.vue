@@ -12,7 +12,7 @@
     <div :class="store.backgroundShow ? 'gray hidden' : 'gray'" />
     <Transition name="fade" mode="out-in">
       <a
-        v-if="store.backgroundShow && store.coverType != '3'"
+        v-if="store.backgroundShow"
         class="down"
         :href="bgUrl"
         target="_blank"
@@ -31,57 +31,16 @@ const store = mainStore();
 const bgUrl = ref(null);
 const imgTimeout = ref(null);
 const currentDeviceType = ref(null);
-const currentBgIndex = ref(0);
 const emit = defineEmits(["loadComplete"]);
 
-// 电脑壁纸
-const desktopBackgrounds = [
-  "/images/backgrounds/desktop/desktop-01.png",
-  "/images/backgrounds/desktop/desktop-02.png",
-  "/images/backgrounds/desktop/desktop-03.jpg",
-  "/images/backgrounds/desktop/desktop-04.png",
-  "/images/backgrounds/desktop/desktop-05.jpg",
-];
-
-// 手机壁纸
-const mobileBackgrounds = [
-  "/images/backgrounds/mobile/mobile-01.jpg",
-  "/images/backgrounds/mobile/mobile-02.png",
-  "/images/backgrounds/mobile/mobile-03.jpg",
-  "/images/backgrounds/mobile/mobile-04.jpg",
-  "/images/backgrounds/mobile/mobile-05.jpg",
-];
-
-const defaultBackground = desktopBackgrounds[0];
 const getDeviceType = () => (window.innerWidth <= 720 ? "mobile" : "desktop");
-const getBackgrounds = () => (getDeviceType() === "mobile" ? mobileBackgrounds : desktopBackgrounds);
-const setRandomBackground = () => {
-  const backgrounds = getBackgrounds();
-  currentBgIndex.value = Math.floor(Math.random() * backgrounds.length);
-  bgUrl.value = backgrounds[currentBgIndex.value];
+const getBackgroundUrl = () => {
+  const device = getDeviceType() === "mobile" ? "mobile" : "pc";
+  return `https://api.nyaovo.com/image/api/random?device=${device}&t=${Date.now()}`;
 };
-const switchLocalBackground = () => {
-  if (store.coverType != "0") {
-    store.coverType = "0";
-  }
+const switchBackground = () => {
   currentDeviceType.value = getDeviceType();
-  const backgrounds = getBackgrounds();
-  currentBgIndex.value = (currentBgIndex.value + 1) % backgrounds.length;
-  bgUrl.value = backgrounds[currentBgIndex.value];
-};
-
-// 更换壁纸链接
-const changeBg = (type) => {
-  if (type == 0) {
-    currentDeviceType.value = getDeviceType();
-    setRandomBackground();
-  } else if (type == 1) {
-    bgUrl.value = "https://api.dujin.org/bing/1920.php";
-  } else if (type == 2) {
-    bgUrl.value = "https://api.vvhan.com/api/wallpaper/views";
-  } else if (type == 3) {
-    bgUrl.value = "https://api.vvhan.com/api/wallpaper/acg";
-  }
+  bgUrl.value = getBackgroundUrl();
 };
 
 // 图片加载完成
@@ -105,43 +64,34 @@ const imgAnimationEnd = () => {
 const imgLoadError = () => {
   console.error("壁纸加载失败：", bgUrl.value);
   ElMessage({
-    message: "壁纸加载失败，已临时切换回默认",
+    message: "壁纸加载失败，正在重新获取",
     icon: h(Error, {
       theme: "filled",
       fill: "#efefef",
     }),
   });
-  bgUrl.value = defaultBackground;
+  bgUrl.value = getBackgroundUrl();
 };
 
 const handleResize = () => {
-  if (store.coverType != "0") return;
   const nextDeviceType = getDeviceType();
   if (nextDeviceType !== currentDeviceType.value) {
     currentDeviceType.value = nextDeviceType;
-    setRandomBackground();
+    bgUrl.value = getBackgroundUrl();
   }
 };
 
-// 监听壁纸切换
-watch(
-  () => store.coverType,
-  (value) => {
-    changeBg(value);
-  },
-);
-
 onMounted(() => {
   // 加载壁纸
-  changeBg(store.coverType);
+  switchBackground();
   window.addEventListener("resize", handleResize);
-  window.addEventListener("switch-local-background", switchLocalBackground);
+  window.addEventListener("switch-background", switchBackground);
 });
 
 onBeforeUnmount(() => {
   clearTimeout(imgTimeout.value);
   window.removeEventListener("resize", handleResize);
-  window.removeEventListener("switch-local-background", switchLocalBackground);
+  window.removeEventListener("switch-background", switchBackground);
 });
 </script>
 
