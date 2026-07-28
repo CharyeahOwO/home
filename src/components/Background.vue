@@ -34,11 +34,22 @@ const currentDeviceType = ref(null);
 const loadRetryCount = ref(0);
 const emit = defineEmits(["loadComplete"]);
 const maxLoadRetry = 5;
+const backgroundCounts = {
+  pc: 11,
+  mobile: 8,
+};
 
 const getDeviceType = () => (window.innerWidth <= 720 ? "mobile" : "desktop");
 const getBackgroundUrl = () => {
   const device = getDeviceType() === "mobile" ? "mobile" : "pc";
-  return `https://api.nyaovo.com/image/api/random?device=${device}&t=${Date.now()}`;
+  const count = backgroundCounts[device];
+  let index = Math.floor(Math.random() * count) + 1;
+  let url = `/images/background/${device}/${String(index).padStart(2, "0")}.webp`;
+  if (url === bgUrl.value) {
+    index = (index % count) + 1;
+    url = `/images/background/${device}/${String(index).padStart(2, "0")}.webp`;
+  }
+  return url;
 };
 const switchBackground = () => {
   currentDeviceType.value = getDeviceType();
@@ -70,7 +81,7 @@ const imgLoadError = () => {
   loadRetryCount.value += 1;
   if (loadRetryCount.value <= maxLoadRetry) {
     ElMessage({
-      message: "壁纸加载失败，正在重新获取",
+      message: "壁纸加载失败，正在重试",
       icon: h(Error, {
         theme: "filled",
         fill: "#efefef",

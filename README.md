@@ -18,8 +18,8 @@ https://nyaovo.com/
 - 主标题改为英文花字体 `Sakuya`，副标题保留中文「樱落之境」。
 - 全站主要中文字体改为 `mao`。
 - 增加本地英文花字体，用于主标题和签名。
-- 背景图改为远程随机图片接口。
-- PC 和手机端按设备请求不同背景，避免手机端裁切不合适。
+- 背景图改为本地洛天依图片。
+- PC 使用横图，手机端使用竖图，避免裁切不合适。
 - 增加右上角「切换背景」按钮，PC 和手机端都可以手动切换当前设备对应的背景图。
 - 移除主页原来的时钟图标 Logo，保留生成的月亮樱花 Logo 作为浏览器标签页图标。
 - 调整卡片透明度、模糊和文字阴影，让背景更清楚。
@@ -33,16 +33,16 @@ https://nyaovo.com/
 
 ## 背景图说明
 
-背景图由远程随机图片接口提供，代码位置在：
+背景图保存在本地，加载逻辑位于：
 
 ```text
 src/components/Background.vue
 ```
 
-当前按设备分为两类：
+当前按构图分为两类：
 
-- PC 背景：`https://api.nyaovo.com/image/api/random?device=pc`
-- 手机背景：`https://api.nyaovo.com/image/api/random?device=mobile`
+- PC 横图：`public/images/background/pc`
+- 手机竖图：`public/images/background/mobile`
 
 ## 配置位置
 
