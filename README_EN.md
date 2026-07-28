@@ -4,7 +4,7 @@ English | [简体中文](./README.md)
 
 This is a customized personal homepage based on [imsyy/home](https://github.com/imsyy/home). It is used as a personal start page with site links, social links, music playback, responsive backgrounds, and mobile-friendly layout.
 
-This version has been redesigned for the "Sakura Realm" theme. Backgrounds are loaded from remote random image APIs, with separate requests for desktop and mobile devices.
+This version has been redesigned for the "Sakura Realm" theme. Backgrounds are loaded from local image collections, with landscape images for desktop and portrait images for mobile devices.
 
 ## Preview
 
@@ -19,8 +19,8 @@ The original template links such as cloud drive, link collection, hot list, and 
 - Kept the Chinese subtitle `樱落之境` under the title.
 - Changed the main Chinese font to `mao`.
 - Added a local script font for the title and signature text.
-- Replaced local background images with remote random image APIs.
-- Split background requests by desktop and mobile devices for better cropping.
+- Added local Luo Tianyi background collections.
+- Use landscape images on desktop and portrait images on mobile for better cropping.
 - Added a top-right background switch button for both desktop and mobile.
 - Removed the old clock-style homepage logo from the main view.
 - Kept the generated moon-and-sakura logo as the browser favicon.
@@ -36,16 +36,16 @@ The original template links such as cloud drive, link collection, hot list, and 
 
 ## Background Images
 
-Backgrounds are loaded from remote random image APIs. The logic is in:
+Backgrounds are loaded from local image collections. The logic is in:
 
 ```text
 src/components/Background.vue
 ```
 
-They are split by device type:
+They are split by composition:
 
-- Desktop backgrounds: `https://api.nyaovo.com/image/api/random?device=pc`
-- Mobile backgrounds: `https://api.nyaovo.com/image/api/random?device=mobile`
+- Desktop landscape images: `public/images/background/pc`
+- Mobile portrait images: `public/images/background/mobile`
 
 ## Configuration
 
@@ -105,7 +105,7 @@ The production files will be generated in the `dist` directory.
 
 ## Docker Deployment
 
-Docker image: `ghcr.io/charyeahowo/home`
+Docker image: `ghcr.io/charyeahowo/home:latest`
 
 ```bash
 docker build -t home .

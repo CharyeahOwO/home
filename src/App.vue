@@ -181,7 +181,7 @@ onBeforeUnmount(() => {
     display: flex;
     justify-content: center;
     align-items: center;
-    top: 84%;
+    top: min(calc(50% + 215px), calc(100% - 82px));
     left: 50%;
     width: 56px;
     height: 34px;
@@ -277,13 +277,6 @@ onBeforeUnmount(() => {
         }
       }
     }
-    .menu {
-      top: 605.64px; // 721px * 0.84
-      left: 50%;
-      @media (min-width: 391px) {
-        left: 50%;
-      }
-    }
     .f-ter {
       top: 675px; // 721px - 46px
       @media (min-width: 391px) {
@@ -320,12 +313,6 @@ onBeforeUnmount(() => {
         padding-left: 0.5rem;
         padding-right: 0.5rem;
       }
-    }
-
-    .menu {
-      top: auto;
-      bottom: 76px;
-      left: 50%;
     }
 
     .f-ter {
